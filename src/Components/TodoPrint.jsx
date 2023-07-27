@@ -3,10 +3,10 @@ import { Button, Col, Card } from "react-bootstrap";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
-const selectTodoData = state => state.todo.data ?? [];
+// const selectTodoData = state => state.todo.data ?? [];
 
 export default function TodoPrint(props) {
-  const todoData = useSelector(selectTodoData);
+  const todoData = useSelector(state => state.todo.data) ?? [];
 
   function cutString(str, maxLength) {
     if (!maxLength || str.length < maxLength) {
@@ -17,8 +17,8 @@ export default function TodoPrint(props) {
 
   return (
     <>
-      {props.todo.length !== 0 ? (
-        props.todo.map(todos => {
+      {todoData.length !== 0 ? (
+        todoData.map(todos => {
           return (
             <Col key={todos._id} xs={12} sm={6} md={4} xl={2} lg={3}>
               <Card style={{ margin: "10px" }}>

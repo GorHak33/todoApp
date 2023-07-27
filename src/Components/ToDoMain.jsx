@@ -5,8 +5,13 @@ import { Container, Row, Button } from "react-bootstrap";
 import Confirm from "./Confirm";
 import CreateEditTodo from "./CreateEditTodo";
 import { useDispatch, useSelector } from "react-redux";
-import { getTask } from "../Redux/todoSlice/todoSlice";
-import request from "../helpers/request";
+import {
+  getTask,
+  addTask,
+  deleteTask,
+  deleteTasks,
+  editTask,
+} from "../Redux/todoSlice/todoSlice";
 
 function ToDoMain() {
   const [todo, setToDo] = useState([]);
@@ -16,8 +21,7 @@ function ToDoMain() {
   const [showCreateEditModal, setShowCreateEditModal] = useState(false);
   const [editTaskData, setEditTaskData] = useState({ ...todo });
 
-  // const dispatch = useDispatch();
-  // const todoData = useSelector(state => state.todo.data ?? []);
+  const dispatch = useDispatch();
   const todoStatus = useSelector(state => state.todo.status);
 
   const showCreateModal = () => {
@@ -35,43 +39,17 @@ function ToDoMain() {
     setShowConfirm(false);
   };
 
-  const addNewTask = async task => {
-    try {
-      const response = await request(
-        "http://localhost:3001/task",
-        "POST",
-        JSON.stringify(task)
-      );
-      const tasks = [...todo, response];
-      setToDo(tasks);
-    } catch (error) {
-      throw new Error();
-    }
+  const addNewTask = task => {
+    dispatch(addTask(task));
     handleClose();
   };
 
   useEffect(() => {
-    const getTask = async () => {
-      try {
-        const response = await request("http://localhost:3001/task", "GET");
-        setToDo(response);
-      } catch (error) {
-        throw new Error();
-      }
-    };
-    getTask();
+    dispatch(getTask());
   }, []);
 
-  const deleteById = async _id => {
-    try {
-      await request(`http://localhost:3001/task/${_id}`, "DELETE");
-      const filtered = todo.filter(elems => {
-        return elems._id !== _id;
-      });
-      setToDo(filtered);
-    } catch (error) {
-      throw new Error();
-    }
+  const deleteById = _id => {
+    dispatch(deleteTask(_id));
   };
 
   const toggleTodo = _id => {
@@ -88,28 +66,9 @@ function ToDoMain() {
     setShowConfirm(true);
   };
 
-  const onDelete = async () => {
-    const body = {
-      tasks: [...selectedTodos],
-    };
-
-    try {
-      await request(
-        "http://localhost:3001/task",
-        "PATCH",
-        JSON.stringify(body)
-      );
-    } catch (error) {
-      throw new Error();
-    }
-    const filteredTodo = todo.filter(todos => {
-      if (selectedTodos.has(todos._id)) {
-        return false;
-      } else {
-        return true;
-      }
-    });
-    setToDo(filteredTodo);
+  const onDelete = () => {
+    const selectedTodosArray = Array.from(selectedTodos);
+    dispatch(deleteTasks(selectedTodosArray));
     setSelectedTodos(new Set());
     setShowConfirm(false);
   };
@@ -121,27 +80,7 @@ function ToDoMain() {
   };
 
   const saveChanges = async (values, _id) => {
-    try {
-      await request(
-        `http://localhost:3001/task/${_id}`,
-        "PUT",
-        JSON.stringify(values)
-      );
-    } catch (error) {
-      throw new Error();
-    }
-    setToDo(prev =>
-      prev.map(el =>
-        el._id === _id
-          ? {
-              ...el,
-              title: values.title,
-              description: values.description,
-              date: values.date,
-            }
-          : el
-      )
-    );
+    dispatch(editTask({ values, _id }));
     setShowCreateEditModal(false);
   };
 

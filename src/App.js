@@ -7,6 +7,7 @@ import ErrorPage from "./Components/pages/ErrorPage";
 import Navbar from "./Components/Navbar";
 import SingleTask from "./Components/pages/SingleTask";
 import Count from "./Redux/countSlice/Count";
+import FileUpload from "./Components/NewComponent";
 
 export default function App() {
   return (
@@ -15,7 +16,7 @@ export default function App() {
       <Navbar />
       <Routes>
         <Route path="/" element={<ToDoMain />} />
-        <Route path="/about" element={<Count />} />
+        <Route path="/about" element={<FileUpload />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/singletask/:taskId" element={<SingleTask />} />
         <Route path="*" element={<ErrorPage />} />
