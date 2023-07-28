@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import request from "../../helpers/request";
+
 export const getTask = createAsyncThunk("todo/getTask", async () => {
   try {
     const response = await request("http://localhost:3001/task", "GET");
@@ -67,25 +68,62 @@ const todoSlice = createSlice({
   initialState: {
     data: [],
     status: "",
+    error: "",
+    pendingStatus: "",
   },
   reducers: {},
   extraReducers: builder => {
     builder
       .addCase(addTask.fulfilled, (state, action) => {
         const newTask = action.payload;
-        state.status = "success";
+        state.status = "Task created successfully";
+        state.pendingStatus = "";
+        state.error = "";
         state.data = [...state.data, newTask];
         return state;
       })
+      .addCase(addTask.pending, (state, action) => {
+        state.pendingStatus = "pending";
+        state.status = "";
+        state.error = "";
+
+        return state;
+      })
+      .addCase(addTask.rejected, (state, action) => {
+        state.pendingStatus = "";
+        state.status = "";
+        state.error = "Adding task is not completed!!";
+        return state;
+      })
+
       .addCase(getTask.fulfilled, (state, action) => {
-        state.status = "success";
         state.data = action.payload;
+        state.pendingStatus = "";
+
+        return state;
+      })
+      .addCase(getTask.pending, (state, action) => {
+        state.pendingStatus = "pending";
+        state.status = "";
+        state.error = "";
+
         return state;
       })
       .addCase(deleteTask.fulfilled, (state, action) => {
         const idToDelete = action.payload;
         const filtered = state.data.filter(task => task._id !== idToDelete);
+        state.status = "Task deleted successfully";
+        state.pendingStatus = "";
+        state.error = "";
+
         state.data = [...filtered];
+      })
+      .addCase(deleteTask.pending, (state, action) => {
+        state.pendingStatus = "pending";
+        state.status = "";
+        state.error = "";
+
+        return state;
       })
 
       .addCase(deleteTasks.fulfilled, (state, action) => {
@@ -97,9 +135,29 @@ const todoSlice = createSlice({
             return true;
           }
         });
-        console.log(idsToDelete);
         state.data = [...newTasks];
+        state.status = "Tasks deleted successfully";
+        state.pendingStatus = "";
+        state.error = "";
       })
+      .addCase(deleteTasks.pending, (state, action) => {
+        state.pendingStatus = "pending";
+        state.status = "";
+        state.error = "";
+
+        return state;
+      })
+      .addCase(deleteTasks.rejected, (state, action) => {
+        state.pendingStatus = "";
+        state.status = "";
+        state.error = "Deleting tasks is not completed!!";
+      })
+      .addCase(deleteTask.rejected, (state, action) => {
+        state.pendingStatus = "";
+        state.status = "";
+        state.error = "Deleting task is not completed!!";
+      })
+
       .addCase(editTask.fulfilled, (state, action) => {
         const { _id, values } = action.payload;
         state.data = state.data.map(task => {
@@ -113,12 +171,27 @@ const todoSlice = createSlice({
           }
           return task;
         });
-        state.status = "success";
+        state.status = "Task has been edited successfully!!!";
+        state.pendingStatus = "";
+        state.error = "";
+      })
+      .addCase(editTask.pending, (state, action) => {
+        state.pendingStatus = "pending";
+        state.status = "";
+        state.error = "";
+
+        return state;
+      })
+      .addCase(editTask.rejected, (state, action) => {
+        state.pendingStatus = "";
+        state.status = "";
+        state.error = "Editing tasks is not completed!!";
       })
 
       .addCase(getTask.rejected, (state, action) => {
-        state.status = "failure";
-        return state;
+        state.pendingStatus = "";
+        state.status = "";
+        state.error = "Getting tasks is not completed!!";
       });
   },
 });

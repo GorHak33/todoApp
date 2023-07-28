@@ -2,63 +2,31 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router";
 import { Button, Col, Card } from "react-bootstrap";
 import CreateEditTodo from "../CreateEditTodo";
+import Loader from "../NewComponent";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  deleteSingleTask,
+  getSingleTask,
+  saveSingleTaskEdit,
+} from "../../Redux/singleTaskSlice/singleTaskSlice";
 
 export default function SingleTask() {
-  const [task, setTask] = useState(null);
+  // const [task, setTask] = useState(null);
   const [openModal, setOpenModal] = useState(false);
   const [modalType, setModalType] = useState("");
 
   const { taskId } = useParams();
   const navigate = useNavigate();
+  const singleTask = useSelector(state => state.singleTask.data);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    function getTask() {
-      fetch(`http://localhost:3001/task/${taskId}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-        .then(async response => {
-          const res = await response.json();
-          if (response.status >= 400 && response.status <= 600) {
-            if (res.error) {
-              throw res.error;
-            } else {
-              throw new Error("smth went wrong");
-            }
-          }
-          setTask(res);
-        })
-        .catch(error => {
-          console.log(" catch error", error);
-        });
-    }
-    getTask();
+    dispatch(getSingleTask(taskId));
   }, [taskId]);
 
   const deleteById = () => {
-    fetch(`http://localhost:3001/task/${taskId}`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then(async response => {
-        const res = await response.json();
-
-        if (response.status >= 400 && response.status <= 600) {
-          if (res.error) {
-            throw res.error;
-          } else {
-            throw new Error("smth went wrong");
-          }
-        }
-        navigate("/");
-      })
-      .catch(error => {
-        console.log(" catch error", error);
-      });
+    dispatch(deleteSingleTask(taskId));
+    navigate("/");
   };
 
   const handleEdit = () => {
@@ -67,28 +35,28 @@ export default function SingleTask() {
   };
 
   const handleSaveTask = task => {
-    console.log(task);
-    fetch(`http://localhost:3001/task/${taskId}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(task),
-    })
-      .then(async response => {
-        const res = await response.json();
-        if (response.status >= 400 && response.status <= 600) {
-          if (res.error) {
-            throw res.error;
-          } else {
-            throw new Error("smth went wrong");
-          }
-        }
-      })
-      .catch(error => {
-        console.log(" catch error", error);
-      });
-    setTask(task);
+    dispatch(saveSingleTaskEdit({ taskId: taskId, task: task }));
+    // fetch(`http://localhost:3001/task/${taskId}`, {
+    //   method: "PUT",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    //   body: JSON.stringify(task),
+    // })
+    //   .then(async response => {
+    //     const res = await response.json();
+    //     if (response.status >= 400 && response.status <= 600) {
+    //       if (res.error) {
+    //         throw res.error;
+    //       } else {
+    //         throw new Error("smth went wrong");
+    //       }
+    //     }
+    //   })
+    //   .catch(error => {
+    //     console.log(" catch error", error);
+    //   });
+    // setTask(task);
     setOpenModal(false);
   };
   const handleClose = () => {
@@ -109,15 +77,15 @@ export default function SingleTask() {
       >
         Single task data
       </h1>
-      {task == null ? (
-        <p>Task data is not exist</p>
+      {singleTask == null ? (
+        <Loader />
       ) : (
-        <Col key={task._id} xs={12} sm={12} md={6} xl={10} lg={5}>
+        <Col key={singleTask._id} xs={12} sm={12} md={6} xl={10} lg={5}>
           <Card style={{ margin: "10px" }}>
             <Card.Body>
-              <Card.Title>Title: {task?.title}</Card.Title>
-              <Card.Text>Description: {task?.description}</Card.Text>
-              <Card.Text>Date: {task?.date.slice(0, 10)}</Card.Text>
+              <Card.Title>Title: {singleTask?.title}</Card.Title>
+              <Card.Text>Description: {singleTask?.description}</Card.Text>
+              <Card.Text>Date: {singleTask?.date?.slice(0, 10)}</Card.Text>
               <Button onClick={() => deleteById()} variant="danger">
                 Delete
               </Button>
@@ -138,7 +106,7 @@ export default function SingleTask() {
           onSave={handleSaveTask}
           show={openModal}
           handleClose={handleClose}
-          editTaskData={task}
+          editTaskData={singleTask}
         />
       )}
     </>

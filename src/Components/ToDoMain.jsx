@@ -22,7 +22,7 @@ function ToDoMain() {
   const [editTaskData, setEditTaskData] = useState({ ...todo });
 
   const dispatch = useDispatch();
-  const todoStatus = useSelector(state => state.todo.status);
+  const isLoading = useSelector(state => state.todo.status === "pending");
 
   const showCreateModal = () => {
     setModalType("create");
@@ -79,7 +79,7 @@ function ToDoMain() {
     setEditTaskData(edit);
   };
 
-  const saveChanges = async (values, _id) => {
+  const saveChanges = (values, _id) => {
     dispatch(editTask({ values, _id }));
     setShowCreateEditModal(false);
   };
@@ -103,8 +103,6 @@ function ToDoMain() {
 
   return (
     <>
-      {todoStatus ? <h1>{todoStatus}</h1> : null}
-
       <h1
         style={{
           width: "100%",

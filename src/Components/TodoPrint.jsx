@@ -20,14 +20,14 @@ export default function TodoPrint(props) {
       {todoData.length !== 0 ? (
         todoData.map(todos => {
           return (
-            <Col key={todos._id} xs={12} sm={6} md={4} xl={2} lg={3}>
+            <Col key={todos?._id} xs={12} sm={6} md={4} xl={2} lg={3}>
               <Card style={{ margin: "10px" }}>
                 <Card.Body>
                   <input
                     type="checkbox"
-                    onChange={() => props.toggleTodo(todos._id)}
+                    onChange={() => props.toggleTodo(todos?._id)}
                   />
-                  <Link to={`/singletask/${todos._id}`}>
+                  <Link to={`/singletask/${todos?._id}`}>
                     <Card.Title>
                       Title: {cutString(todos?.title, 20)}
                     </Card.Title>
