@@ -1,15 +1,24 @@
 import React, { useEffect } from "react";
-import ToDoMain from "./Components/ToDoMain";
+import ToDoMain from "./Components/TodoMain/ToDoMain";
 import { Routes, Route } from "react-router";
 import About from "./Components/pages/About";
 import Contact from "./Components/pages/Contact";
 import ErrorPage from "./Components/pages/ErrorPage";
-import Navbar from "./Components/Navbar";
+import Navbar from "./Components/Nav/Navbar";
 import SingleTask from "./Components/pages/SingleTask";
-import Loader from "./Components/NewComponent";
+import Loader from "./Components/Loader";
 import { useSelector } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+
+const toastStyles = {
+  position: "bottom-left",
+  autoClose: 3000,
+  hideProgressBar: false,
+  closeOnClick: true,
+  pauseOnHover: true,
+  draggable: true,
+};
 
 export default function App() {
   const isLoading = useSelector(
@@ -20,23 +29,9 @@ export default function App() {
 
   useEffect(() => {
     if (status) {
-      toast.success(status, {
-        position: "bottom-left",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-      });
+      toast.success(status, toastStyles);
     } else if (error) {
-      toast.error(error, {
-        position: "bottom-left",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-      });
+      toast.error(error, toastStyles);
     }
   }, [status, error]);
   return (

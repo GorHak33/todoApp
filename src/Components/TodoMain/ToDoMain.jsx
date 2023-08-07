@@ -1,9 +1,9 @@
 import { useEffect, useMemo, useState } from "react";
-import TodoPrint from "./TodoPrint";
+import TodoPrint from "../TodoPrint/TodoPrint";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { Container, Row, Button } from "react-bootstrap";
-import Confirm from "./Confirm";
-import CreateEditTodo from "./CreateEditTodo";
+import { Container, Row, Button, Col } from "react-bootstrap";
+import Confirm from "../Confirm";
+import CreateEditTodo from "../Create&Edit/CreateEditTodo";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getTask,
@@ -11,7 +11,8 @@ import {
   deleteTask,
   deleteTasks,
   editTask,
-} from "../Redux/todoSlice/todoSlice";
+} from "../../Redux/todoSlice/todoSlice";
+import Search from "../Search";
 
 function ToDoMain() {
   const [todo, setToDo] = useState([]);
@@ -116,6 +117,11 @@ function ToDoMain() {
         "Conquer Your Day: A Productive To-Do List"
       </h1>
       <Container>
+        <Row>
+          <Col>
+            <Search />
+          </Col>
+        </Row>
         <Row>
           <Button
             variant="primary"

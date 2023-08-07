@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router";
 import { Button, Col, Card } from "react-bootstrap";
-import CreateEditTodo from "../CreateEditTodo";
-import Loader from "../NewComponent";
+import CreateEditTodo from "../Create&Edit/CreateEditTodo";
+import Loader from "../Loader";
 import { useDispatch, useSelector } from "react-redux";
 import {
   deleteSingleTask,
@@ -11,10 +11,8 @@ import {
 } from "../../Redux/singleTaskSlice/singleTaskSlice";
 
 export default function SingleTask() {
-  // const [task, setTask] = useState(null);
   const [openModal, setOpenModal] = useState(false);
   const [modalType, setModalType] = useState("");
-
   const { taskId } = useParams();
   const navigate = useNavigate();
   const singleTask = useSelector(state => state.singleTask.data);
@@ -36,27 +34,6 @@ export default function SingleTask() {
 
   const handleSaveTask = task => {
     dispatch(saveSingleTaskEdit({ taskId: taskId, task: task }));
-    // fetch(`http://localhost:3001/task/${taskId}`, {
-    //   method: "PUT",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    //   body: JSON.stringify(task),
-    // })
-    //   .then(async response => {
-    //     const res = await response.json();
-    //     if (response.status >= 400 && response.status <= 600) {
-    //       if (res.error) {
-    //         throw res.error;
-    //       } else {
-    //         throw new Error("smth went wrong");
-    //       }
-    //     }
-    //   })
-    //   .catch(error => {
-    //     console.log(" catch error", error);
-    //   });
-    // setTask(task);
     setOpenModal(false);
   };
   const handleClose = () => {

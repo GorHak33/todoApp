@@ -1,9 +1,16 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import request from "../../helpers/request";
 
-export const getTask = createAsyncThunk("todo/getTask", async () => {
+const apiHost = process.env.REACT_APP_API_HOST;
+export const getTask = createAsyncThunk("todo/getTask", async (params = {}) => {
+  const query = Object.entries(params)
+    .map(([key, value]) => {
+      return `${key}=${value}`;
+    })
+    .join("&");
+
   try {
-    const response = await request("http://localhost:3001/task", "GET");
+    const response = await request(`${apiHost}/task?${query}`, "GET");
     return response;
   } catch (error) {
     throw error;
@@ -13,7 +20,7 @@ export const getTask = createAsyncThunk("todo/getTask", async () => {
 export const addTask = createAsyncThunk("todo/addTask", async task => {
   try {
     const response = await request(
-      "http://localhost:3001/task",
+      `${apiHost}/task`,
       "POST",
       JSON.stringify(task)
     );
@@ -25,10 +32,7 @@ export const addTask = createAsyncThunk("todo/addTask", async task => {
 
 export const deleteTask = createAsyncThunk("todo/deleteTask", async _id => {
   try {
-    const response = await request(
-      `http://localhost:3001/task/${_id}`,
-      "DELETE"
-    );
+    const response = await request(`${apiHost}/task/${_id}`, "DELETE");
     if (response.success) {
       return _id;
     }
@@ -39,7 +43,7 @@ export const deleteTask = createAsyncThunk("todo/deleteTask", async _id => {
 
 export const deleteTasks = createAsyncThunk("todo/deleteTasks", async tasks => {
   try {
-    await request("http://localhost:3001/task", "PATCH", { tasks });
+    await request(`${apiHost}/task`, "PATCH", { tasks });
     return tasks;
   } catch (error) {
     console.log(tasks);
@@ -51,11 +55,7 @@ export const editTask = createAsyncThunk(
   "todo/editTask",
   async ({ _id, values }) => {
     try {
-      await request(
-        `http://localhost:3001/task/${_id}`,
-        "PUT",
-        JSON.stringify(values)
-      );
+      await request(`${apiHost}/task/${_id}`, "PUT", JSON.stringify(values));
       return { _id, values };
     } catch (error) {
       throw error;
@@ -150,12 +150,12 @@ const todoSlice = createSlice({
       .addCase(deleteTasks.rejected, (state, action) => {
         state.pendingStatus = "";
         state.status = "";
-        state.error = "Deleting tasks is not completed!!";
+        state.error = "Failed to fetch";
       })
       .addCase(deleteTask.rejected, (state, action) => {
         state.pendingStatus = "";
         state.status = "";
-        state.error = "Deleting task is not completed!!";
+        state.error = "Failed to fetch";
       })
 
       .addCase(editTask.fulfilled, (state, action) => {
@@ -185,13 +185,13 @@ const todoSlice = createSlice({
       .addCase(editTask.rejected, (state, action) => {
         state.pendingStatus = "";
         state.status = "";
-        state.error = "Editing tasks is not completed!!";
+        state.error = "Failed to fetch";
       })
 
       .addCase(getTask.rejected, (state, action) => {
         state.pendingStatus = "";
         state.status = "";
-        state.error = "Getting tasks is not completed!!";
+        state.error = "Failed to fetch";
       });
   },
 });

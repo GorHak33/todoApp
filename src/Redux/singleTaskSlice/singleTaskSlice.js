@@ -1,14 +1,12 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import request from "../../helpers/request";
+const apiHost = `http://localhost:3001`;
 
 export const getSingleTask = createAsyncThunk(
   "singleTask/getSingleTask",
   async taskId => {
     try {
-      const response = await request(
-        `http://localhost:3001/task/${taskId}`,
-        "GET"
-      );
+      const response = await request(`${apiHost}/task/${taskId}`, "GET");
       return response;
     } catch (error) {
       throw error;
@@ -20,10 +18,7 @@ export const deleteSingleTask = createAsyncThunk(
   "singleTask/deleteSingleTask",
   async taskId => {
     try {
-      const response = await request(
-        `http://localhost:3001/task/${taskId}`,
-        "DELETE"
-      );
+      const response = await request(`${apiHost}/task/${taskId}`, "DELETE");
       if (response.success) {
         return taskId;
       }
@@ -37,11 +32,7 @@ export const saveSingleTaskEdit = createAsyncThunk(
   "singleTask/saveSingleTaskEdit",
   async ({ task, taskId }) => {
     try {
-      await request(
-        `http://localhost:3001/task/${taskId}`,
-        "PUT",
-        JSON.stringify(task)
-      );
+      await request(`${apiHost}/task/${taskId}`, "PUT", JSON.stringify(task));
 
       return { task, taskId };
     } catch (error) {
