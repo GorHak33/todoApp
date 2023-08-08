@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import TodoPrint from "../TodoPrint/TodoPrint";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Container, Row, Button, Col } from "react-bootstrap";
@@ -87,17 +87,18 @@ function ToDoMain() {
     _id ? saveChanges(values, _id) : addNewTask(values);
   };
 
-  const todoWithMemo = useMemo(
-    () => (
+  const memoizedDeleteById = useCallback(deleteById, [dispatch]);
+  const memoizedToggleTodo = useCallback(toggleTodo, [selectedTodos]);
+  const todoWithMemo = useMemo(() => {
+    return (
       <TodoPrint
-        deleteById={deleteById}
-        toggleTodo={toggleTodo}
+        deleteById={memoizedDeleteById}
+        toggleTodo={memoizedToggleTodo}
         selectedTodos={selectedTodos}
         handleEdit={handleEdit}
       />
-    ),
-    [selectedTodos, toggleTodo]
-  );
+    );
+  }, [selectedTodos, memoizedDeleteById, memoizedToggleTodo]);
 
   return (
     <>
