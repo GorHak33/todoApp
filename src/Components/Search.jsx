@@ -77,8 +77,6 @@ export default function Search() {
     sort.value && (params.sort = sort.value);
     status.value && (params.status = status.value);
 
-    console.log(params);
-
     dispatch(getTask(params));
   };
 

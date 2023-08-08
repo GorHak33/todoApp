@@ -52,7 +52,7 @@ export default function SingleTask() {
           marginTop: "5px",
         }}
       >
-        Single task data
+        Chosen Task Data
       </h1>
       {singleTask == null ? (
         <Loader />

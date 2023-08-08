@@ -4,7 +4,6 @@ import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { cutString } from "../../helpers/cutString";
-// const selectTodoData = state => state.todo.data ?? [];
 
 export default function TodoPrint(props) {
   const todoData = useSelector(state => state.todo.data) ?? [];
