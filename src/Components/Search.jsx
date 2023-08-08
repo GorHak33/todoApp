@@ -73,8 +73,8 @@ export default function Search() {
   const dispatch = useDispatch();
   const location = useLocation();
 
+  const params = {};
   const handleSubmit = () => {
-    const params = {};
     search && (params.search = search);
     sort.value && (params.sort = sort.value);
     status.value && (params.status = status.value);

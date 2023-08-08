@@ -4,7 +4,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { Container, Row, Button, Col } from "react-bootstrap";
 import Confirm from "../Confirm";
 import CreateEditTodo from "../Create&Edit/CreateEditTodo";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import {
   getTask,
   addTask,
@@ -15,15 +15,13 @@ import {
 import Search from "../Search";
 
 function ToDoMain() {
-  const [todo, setToDo] = useState([]);
   const [selectedTodos, setSelectedTodos] = useState(new Set());
   const [showConfirm, setShowConfirm] = useState(false);
   const [modalType, setModalType] = useState();
   const [showCreateEditModal, setShowCreateEditModal] = useState(false);
-  const [editTaskData, setEditTaskData] = useState({ ...todo });
+  const [editTaskData, setEditTaskData] = useState();
 
   const dispatch = useDispatch();
-  const isLoading = useSelector(state => state.todo.status === "pending");
 
   const showCreateModal = () => {
     setModalType("create");
@@ -47,7 +45,7 @@ function ToDoMain() {
 
   useEffect(() => {
     dispatch(getTask());
-  }, []);
+  }, [dispatch]);
 
   const deleteById = _id => {
     dispatch(deleteTask(_id));
@@ -92,14 +90,13 @@ function ToDoMain() {
   const todoWithMemo = useMemo(
     () => (
       <TodoPrint
-        todo={todo}
         deleteById={deleteById}
         toggleTodo={toggleTodo}
         selectedTodos={selectedTodos}
         handleEdit={handleEdit}
       />
     ),
-    [todo, selectedTodos]
+    [selectedTodos, toggleTodo]
   );
 
   return (
@@ -140,7 +137,7 @@ function ToDoMain() {
           />
 
           {/* <TodoPrint
-            todo={todo}
+         
             deleteById={deleteById}
             toggleTodo={toggleTodo}
             selectedTodos={selectedTodos}
