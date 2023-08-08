@@ -20,7 +20,7 @@ export default function SingleTask() {
 
   useEffect(() => {
     dispatch(getSingleTask(taskId));
-  }, [taskId]);
+  }, [taskId, dispatch]);
 
   const deleteById = () => {
     dispatch(deleteSingleTask(taskId));

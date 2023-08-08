@@ -67,7 +67,7 @@ const singleTaskSlice = createSlice({
         state.status = "pending";
       })
       .addCase(saveSingleTaskEdit.fulfilled, (state, action) => {
-        const { taskId, task } = action.payload;
+        const { task } = action.payload;
         state.data = {
           ...state.data,
           title: task.title,

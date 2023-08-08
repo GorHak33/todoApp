@@ -9,7 +9,6 @@ import {
 import { cutString } from "../helpers/cutString";
 import { getTask } from "../Redux/todoSlice/todoSlice";
 import { useDispatch } from "react-redux";
-import { useLocation } from "react-router-dom";
 
 const searchOptions = [
   {
@@ -71,7 +70,6 @@ export default function Search() {
   const [search, setSearch] = useState("");
 
   const dispatch = useDispatch();
-  const location = useLocation();
 
   const params = {};
   const handleSubmit = () => {
