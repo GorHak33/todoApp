@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import request from "../../helpers/request";
-const apiHost = `http://localhost:3001`;
+const apiHost = process.env.REACT_APP_API_HOST;
 
 export const getSingleTask = createAsyncThunk(
   "singleTask/getSingleTask",
