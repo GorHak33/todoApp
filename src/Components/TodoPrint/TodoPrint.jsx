@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { cutString } from "../../helpers/cutString";
-import { changeStatus, editTask } from "../../Redux/todoSlice/todoSlice";
+import { changeStatus } from "../../Redux/todoSlice/todoSlice";
 import {
   Trash,
   Pencil,
