@@ -63,6 +63,20 @@ export const editTask = createAsyncThunk(
   }
 );
 
+export const changeStatus = createAsyncThunk(
+  "todo/changeStatus",
+  async ({ _id, status }) => {
+    try {
+      await request(`${apiHost}/task/${_id}`, "PUT", {
+        status: status,
+      });
+      return { _id, status };
+    } catch (error) {
+      throw error;
+    }
+  }
+);
+
 const todoSlice = createSlice({
   name: "TODO",
   initialState: {
@@ -175,6 +189,19 @@ const todoSlice = createSlice({
         state.pendingStatus = "";
         state.error = "";
       })
+
+      .addCase(changeStatus.fulfilled, (state, action) => {
+        const { _id, status } = action.payload;
+        const taskToUpdate = state.data.find(task => task._id === _id);
+        if (taskToUpdate) {
+          taskToUpdate.status = status;
+        }
+
+        state.status = "Task has been  marked as done!!!";
+        state.pendingStatus = "";
+        state.error = "";
+      })
+
       .addCase(editTask.pending, (state, action) => {
         state.pendingStatus = "pending";
         state.status = "";
