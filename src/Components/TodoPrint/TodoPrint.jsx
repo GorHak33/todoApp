@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Button, Col, Card } from "react-bootstrap";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
@@ -42,7 +42,7 @@ export default function TodoPrint(props) {
                   </Card.Text>
                   <Card.Text>Date: {todos?.date.slice(0, 10)}</Card.Text>
                   <Button
-                    onClick={() => props.deleteById(todos._id)}
+                    onClick={() => props.deleteById(todos?._id)}
                     variant="danger"
                     disabled={props.selectedTodos.size > 0 ? true : false}
                   >

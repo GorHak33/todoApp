@@ -4,7 +4,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { Container, Row, Button, Col } from "react-bootstrap";
 import Confirm from "../Confirm";
 import CreateEditTodo from "../Create&Edit/CreateEditTodo";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   getTask,
   addTask,
@@ -13,6 +13,7 @@ import {
   editTask,
 } from "../../Redux/todoSlice/todoSlice";
 import Search from "../Search";
+import Navbar from "../Nav/Navbar";
 
 function ToDoMain() {
   const [selectedTodos, setSelectedTodos] = useState(new Set());
@@ -22,6 +23,8 @@ function ToDoMain() {
   const [editTaskData, setEditTaskData] = useState();
 
   const dispatch = useDispatch();
+  const todoData = useSelector(state => state.todo.data) ?? [];
+  const token = localStorage.getItem("token") || "";
 
   const showCreateModal = () => {
     setModalType("create");
@@ -39,13 +42,14 @@ function ToDoMain() {
   };
 
   const addNewTask = task => {
-    dispatch(addTask(task));
+    token && dispatch(addTask(task));
+
     handleClose();
   };
 
   useEffect(() => {
     dispatch(getTask());
-  }, [dispatch]);
+  }, [token]);
 
   const deleteById = _id => {
     dispatch(deleteTask(_id));
@@ -87,19 +91,6 @@ function ToDoMain() {
     _id ? saveChanges(values, _id) : addNewTask(values);
   };
 
-  const memoizedDeleteById = useCallback(deleteById, [dispatch]);
-  const memoizedToggleTodo = useCallback(toggleTodo, [selectedTodos]);
-  const todoWithMemo = useMemo(() => {
-    return (
-      <TodoPrint
-        deleteById={memoizedDeleteById}
-        toggleTodo={memoizedToggleTodo}
-        selectedTodos={selectedTodos}
-        handleEdit={handleEdit}
-      />
-    );
-  }, [selectedTodos, memoizedDeleteById, memoizedToggleTodo]);
-
   return (
     <>
       <h1
@@ -114,6 +105,7 @@ function ToDoMain() {
       >
         "Conquer Your Day: A Productive To-Do List"
       </h1>
+      <></>
       <Container>
         <Row>
           <Col>
@@ -137,14 +129,13 @@ function ToDoMain() {
             editTaskData={editTaskData}
           />
 
-          {/* <TodoPrint
-         
+          <TodoPrint
             deleteById={deleteById}
             toggleTodo={toggleTodo}
             selectedTodos={selectedTodos}
             handleEdit={handleEdit}
-          /> */}
-          {todoWithMemo}
+          />
+          {/* {todoWithMemo} */}
           <Button
             style={{ marginTop: "10px" }}
             onClick={() => openConfirm()}
