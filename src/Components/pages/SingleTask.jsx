@@ -21,6 +21,7 @@ export default function SingleTask() {
   useEffect(() => {
     dispatch(getSingleTask(taskId));
   }, [taskId, dispatch]);
+  console.log(singleTask);
 
   const deleteById = () => {
     dispatch(deleteSingleTask(taskId));

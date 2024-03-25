@@ -11,6 +11,7 @@ export const getTask = createAsyncThunk("todo/getTask", async (params = {}) => {
 
   try {
     const response = await request(`${apiHost}/task?${query}`, "GET");
+
     return response;
   } catch (error) {
     throw error;
@@ -33,6 +34,7 @@ export const addTask = createAsyncThunk("todo/addTask", async task => {
 export const deleteTask = createAsyncThunk("todo/deleteTask", async _id => {
   try {
     const response = await request(`${apiHost}/task/${_id}`, "DELETE");
+
     if (response.success) {
       return _id;
     }
@@ -44,9 +46,9 @@ export const deleteTask = createAsyncThunk("todo/deleteTask", async _id => {
 export const deleteTasks = createAsyncThunk("todo/deleteTasks", async tasks => {
   try {
     await request(`${apiHost}/task`, "PATCH", { tasks });
+
     return tasks;
   } catch (error) {
-    console.log(tasks);
     throw new Error();
   }
 });
@@ -125,11 +127,11 @@ const todoSlice = createSlice({
       })
       .addCase(deleteTask.fulfilled, (state, action) => {
         const idToDelete = action.payload;
+
         const filtered = state.data.filter(task => task._id !== idToDelete);
         state.status = "Task deleted successfully";
         state.pendingStatus = "";
         state.error = "";
-
         state.data = [...filtered];
       })
       .addCase(deleteTask.pending, (state, action) => {
