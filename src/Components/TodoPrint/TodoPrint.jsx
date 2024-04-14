@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Button, Col, Card } from "react-bootstrap";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
