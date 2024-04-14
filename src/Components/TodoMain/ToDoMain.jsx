@@ -4,7 +4,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { Container, Row, Button, Col } from "react-bootstrap";
 import Confirm from "../Confirm";
 import CreateEditTodo from "../Create&Edit/CreateEditTodo";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import {
   getTask,
   addTask,
