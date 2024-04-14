@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import TodoPrint from "../TodoPrint/TodoPrint";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Container, Row, Button, Col } from "react-bootstrap";
@@ -22,7 +22,7 @@ function ToDoMain() {
   const [editTaskData, setEditTaskData] = useState();
 
   const dispatch = useDispatch();
-  const todoData = useSelector(state => state.todo.data) ?? [];
+  // const todoData = useSelector(state => state.todo.data) ?? [];
   const token = localStorage.getItem("token") || "";
 
   const showCreateModal = () => {
@@ -48,7 +48,7 @@ function ToDoMain() {
 
   useEffect(() => {
     dispatch(getTask());
-  }, [token]);
+  }, [dispatch, token]);
 
   const deleteById = _id => {
     dispatch(deleteTask(_id));
