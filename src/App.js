@@ -12,7 +12,6 @@ import SingleTask from "./Components/pages/SingleTask";
 import Loader from "./Components/Loader";
 import Registration from "./Components/pages/Registration";
 import SignInPage from "./Components/pages/SignIn";
-import SignOutButton from "./Components/SignOutButton";
 
 const toastStyles = {
   position: "bottom-left",
