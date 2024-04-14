@@ -13,7 +13,6 @@ import {
   editTask,
 } from "../../Redux/todoSlice/todoSlice";
 import Search from "../Search";
-import Navbar from "../Nav/Navbar";
 
 function ToDoMain() {
   const [selectedTodos, setSelectedTodos] = useState(new Set());

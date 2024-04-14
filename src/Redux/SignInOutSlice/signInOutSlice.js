@@ -3,7 +3,6 @@ import request from "../../helpers/request";
 
 const apiHost = process.env.REACT_APP_API_HOST;
 
-// Create async thunk action for signing in
 export const signIn = createAsyncThunk(
   "signInOutSlice/signIn",
   async requestBody => {
